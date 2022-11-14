@@ -1,33 +1,16 @@
-version: "3"
-services:
-  postgres:
-    image: library/postgres:13
-    container_name: postgres
-    restart: on-failure
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: "postgres"
-      POSTGRES_DB: postgres
-    volumes:
-      - db-data:/var/lib/postgresql/data
-      - ./postgres/:/docker-entrypoint-initdb.d/
-    ports:
-      - "5432:5432"
-
-# TODO добавить сервисы
-
+version: '3.8'
 services:
   config-server:
     image: config-server
     container_name: config-server
     build:
-      context: docker-compose/config-server
+      context: config-server
     restart: on-failure
   gateway:
     image: gateway
     container_name: gateway
     build:
-      context: docker-compose/gateway
+      context: gateway
     depends_on:
       - config-server
     restart: on-failure
@@ -35,7 +18,7 @@ services:
     image: bonus-service
     container_name: bonus-service
     build:
-      context: docker-compose/bonus-service
+      context: bonus-service
     depends_on:
       - config-server
     restart: on-failure
@@ -43,7 +26,7 @@ services:
     image: flight-service
     container_name: flight-service
     build:
-      context: docker-compose/flight-service
+      context: flight-service
     depends_on:
       - config-server
     restart: on-failure
@@ -51,7 +34,7 @@ services:
     image: ticket-service
     container_name: ticket-service
     build:
-      context: docker-compose/ticket-service
+      context: ticket-service
     depends_on:
       - config-server
     restart: on-failure
@@ -59,10 +42,7 @@ services:
     image: user-service
     container_name: user-service
     build:
-      context: docker-compose/user-service
+      context: user-service
     depends_on:
       - config-server
     restart: on-failure
-    
-volumes:
-  db-data:
