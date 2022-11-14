@@ -9,4 +9,4 @@ spring:
       enabled: true
 
 server:
-  port: ${PORT:8094}
+  port: ${PORT:8050}

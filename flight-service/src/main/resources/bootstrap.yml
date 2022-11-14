@@ -9,5 +9,5 @@ spring:
       enabled: true
 
 server:
-  port: ${PORT:8092}
+  port: ${PORT:8060}
 
