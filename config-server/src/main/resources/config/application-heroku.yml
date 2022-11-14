@@ -1,0 +1,15 @@
+app.service:
+  gateway:
+    baseUrl: https://bmstu-rsoi-lab2-gateway.herokuapp.com
+  userService:
+    baseUrl: https://bmstu-rsoi-lab2-user-service.herokuapp.com
+    url: https://bmstu-rsoi-lab2-user-service.herokuapp.com/api/v1
+  flightService:
+    baseUrl: https://bmstu-rsoi-lab2-flight-service.herokuapp.com
+    url: https://bmstu-rsoi-lab2-flight-service.herokuapp.com/api/v1
+  ticketService:
+    baseUrl: https://bmstu-rsoi-lab2-ticket-service.herokuapp.com
+    uri: https://bmstu-rsoi-lab2-ticket-service.herokuapp.com/api/v1
+  bonusService:
+    baseUrl: https://bmstu-rsoi-lab2-bonus-service.herokuapp.com
+    uri: https://bmstu-rsoi-lab2-bonus-service.herokuapp.com/api/v1
