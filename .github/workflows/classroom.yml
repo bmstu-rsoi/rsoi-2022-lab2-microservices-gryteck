@@ -21,12 +21,11 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '11'
-          distribution: 'zulu'
+          distribution: 'adopt'
           cache: gradle
+
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
-      - name: Setup gradle
-        uses: gradle/gradle-build-action@v2
 
       - name: Build with Gradle
         run: ./gradlew clean build
