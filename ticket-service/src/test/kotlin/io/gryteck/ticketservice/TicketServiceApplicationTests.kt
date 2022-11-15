@@ -1,4 +1,4 @@
-package io.almishev.ticketservice
+package io.gryteck.ticketservice
 
 import org.springframework.boot.test.context.SpringBootTest
 
