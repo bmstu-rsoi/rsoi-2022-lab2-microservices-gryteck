@@ -42,7 +42,7 @@ jobs:
           WAIT_PORTS: 8080,8070,8060,8050,5432
 
       - name: Run API Tests
-        uses: matt-ball/newman-action@master
+        uses: anthonyvscode/newman-action@v1
         with:
           collection: v1/postman/collection.json
           environment: v1/postman/environment.json
