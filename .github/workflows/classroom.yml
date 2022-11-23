@@ -2,10 +2,10 @@ name: GitHub Classroom Workflow
 on:
   push:
     branches:
-      - master
+      - develop3
   pull_request:
     branches:
-      - master
+      - develop3
 jobs:
   build:
     name: Autograding
@@ -31,12 +31,16 @@ jobs:
         env:
           - WAIT_PORTS=8080,8070,8060,8050
 
+      - name: Countdown
+        run: sleep 30s
+        shell: bash
+
       - name: Run API Tests
         uses: matt-ball/newman-action@master
         with:
           # TODO insert your variant
-          collection: <variant>/postman/collection.json
-          environment: <variant>/postman/environment.json
+          collection: v1/postman/collection.json
+          environment: v1/postman/environment.json
           delayRequest: 100
           reporters: '[ "cli" ]'
 

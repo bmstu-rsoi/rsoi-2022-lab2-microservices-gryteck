@@ -12,9 +12,36 @@ services:
       - db-data:/var/lib/postgresql/data
       - ./postgres/:/docker-entrypoint-initdb.d/
     ports:
-      - "5432:5432"
+      - "5433:5432"
 
 # TODO добавить сервисы
+  gateway:
+    restart: on-failure
+    build: ./gateway/
+    container_name: gateway
+    ports:
+      - "8080:8080"
+
+  ticket:
+    restart: on-failure
+    build: ./ticket/
+    container_name: ticket
+    ports:
+      - "8070:8070"
+
+  flight:
+    restart: on-failure
+    build: ./flight/
+    container_name: flight
+    ports:
+      - "8060:8060"
+
+  privilege:
+    restart: on-failure
+    build: ./privilege/
+    container_name: privilege
+    ports:
+      - "8050:8050"
 
 volumes:
   db-data:
