@@ -6,10 +6,6 @@ from flask import make_response
 from flask import request, Responce
 from curses.ascii import NUL
 
-port = os.environ.get('PORT')
-if port is None:
-    port = 8060
-
 app = Flask(__name__)
 
 @app.errorhandler(404)
@@ -46,5 +42,6 @@ def flight_exist():
 
 
 
-if __name__ == '__main__':
-    app.run(host="0.0.0.0", debug=True, port=int(port))
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 8060))
+    app.run(debug=True, port=port, host="0.0.0.0")

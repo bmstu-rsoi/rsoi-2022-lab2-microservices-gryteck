@@ -10,10 +10,6 @@ import uuid
 from curses.ascii import NUL
 
 
-port = os.environ.get('PORT')
-if port is None:
-    port = 8080
-
 app = Flask(__name__)
 
 baseUrlBonus = 'http://10.5.0.4:8050'
@@ -152,5 +148,6 @@ def me():
 
 
 
-if __name__ == '__main__':
-    app.run(host="0.0.0.0", debug=True, port=int(port))
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 8080))
+    app.run(debug=True, port=port, host="0.0.0.0")
