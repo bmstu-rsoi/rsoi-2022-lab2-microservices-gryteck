@@ -5,9 +5,9 @@ import uuid
 class TicketsDB:
     def __init__(self):
         self.connection = psycopg2.connect(
-            database="flights",
-            user="user",
-            password="password",
+            database="tickets",
+            user="program",
+            password="test",
             host="10.5.0.2",
             port="5432"
         )

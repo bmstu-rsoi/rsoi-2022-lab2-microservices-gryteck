@@ -6,8 +6,8 @@ class FlightsDB:
     def __init__(self):
         self.connnection = psycopg2.connect(
             database="flights",
-            user="user",
-            password="password",
+            user="program",
+            password="test",
             host="10.5.0.2",
             port="5432"
         )

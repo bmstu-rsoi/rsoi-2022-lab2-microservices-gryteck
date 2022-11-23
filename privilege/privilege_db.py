@@ -1,12 +1,13 @@
 import psycopg2
 from psycopg2 import Error
+import datetime
 
 class PrivilegeDB:
     def __init__(self):
         self.connection = psycopg2.connect(
-            database="privilege",
-            user="user",
-            password="password",
+            database="privileges",
+            user="program",
+            password="test",
             host="10.5.0.2",
             port="5432"
         )
