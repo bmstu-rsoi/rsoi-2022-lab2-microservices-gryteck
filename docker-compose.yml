@@ -13,6 +13,9 @@ services:
       - ./postgres/:/docker-entrypoint-initdb.d/
     ports:
       - "5432:5432"
+    networks:
+      default:
+        ipv4_address: 10.5.0.2
 
 # TODO добавить сервисы
   gateway:
@@ -21,6 +24,9 @@ services:
     container_name: gateway
     ports:
       - "8080:8080"
+    networks:
+      default:
+        ipv4_address: 10.5.0.3
 
   ticket:
     restart: on-failure
@@ -28,6 +34,9 @@ services:
     container_name: ticket
     ports:
       - "8070:8070"
+    networks:
+      default:
+        ipv4_address: 10.5.0.4
 
   flight:
     restart: on-failure
@@ -35,6 +44,9 @@ services:
     container_name: flight
     ports:
       - "8060:8060"
+    networks:
+      default:
+        ipv4_address: 10.5.0.5
 
   privilege:
     restart: on-failure
@@ -42,6 +54,9 @@ services:
     container_name: privilege
     ports:
       - "8050:8050"
+    networks:
+      default:
+        ipv4_address: 10.5.0.6
 
 volumes:
   db-data:
