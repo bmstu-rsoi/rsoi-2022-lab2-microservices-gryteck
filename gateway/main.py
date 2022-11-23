@@ -16,7 +16,9 @@ if port is None:
 
 app = Flask(__name__)
 
-
+baseUrlBonus = 'http://10.5.0.4:8050'
+baseUrlFlight = 'http://10.5.0.5:8060'
+baseUrlTickets = 'http://10.5.0.6:8070'
 
 @app.route('/api/v1/test', methods=['GET'])
 def get_test():
