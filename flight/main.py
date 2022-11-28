@@ -3,7 +3,7 @@ from flight_db import FlightDB
 from flask import Flask, jsonify
 from flask import abort
 from flask import make_response
-from flask import request, Responce
+from flask import request
 from curses.ascii import NUL
 
 app = Flask(__name__)
@@ -24,7 +24,7 @@ def get_flights():
     page = request.args.get('page', default=0, type= int)
     size = request.args.get('size', default=0, type= int)
     db = FlightDB()
-    items = db.get_flightss()
+    items = db.get_flights()
     result = {'page': page, 'pageSize': size, 'totalElements': len(items),  'items': items}
     return make_response(jsonify(result), 200)
 
@@ -32,7 +32,7 @@ def get_flights():
 
 @app.route('/api/v1/flights/exist', methods=['GET'])
 def flight_exist():
-    db = FlightsDB()
+    db = FlightDB()
     args = request.data.decode()
     result = db.flight_exist(args)
     db.db_disconnect()

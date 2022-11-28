@@ -1,15 +1,13 @@
 import os
-from ticket_db import ticket_db
+from ticket_db import TicketDB
 from flask import Flask, jsonify
 from flask import abort
 from flask import make_response
-from flask import request, Responce
+from flask import request
 from curses.ascii import NUL
 
 
 app = Flask(__name__)
-
-
 
 @app.errorhandler(404)
 def not_found(error):
@@ -27,7 +25,7 @@ def get_test():
 def get_tickets():
     page = request.args.get('page', default=0, type= int)
     size = request.args.get('size', default=0, type= int)
-    db = ticketsDB()
+    db = TicketDB()
     items = db.get_tickets()
     result = {'page': page, 'pageSize': size, 'totalElements': len(items),  'items': items}
     return make_response(jsonify(result), 200)
@@ -37,11 +35,11 @@ def get_tickets():
 @app.route('/api/v1/tickets/<string:ticket_uid>', methods=['GET'])
 def get_ticket_by_uid(ticket_uid):
     username = request.headers['X-User-Name']
-    db = TicketsDB()
+    db = TicketDB()
     result = db.get_ticket_by_uid(ticket_uid, username)
     db.db_disconnect()
     if not result:
-        return Response(status=404)
+        return make_response(jsonify({'error': 'Not found in ticket'}), 404)
     return result
 
 
@@ -49,7 +47,7 @@ def get_ticket_by_uid(ticket_uid):
 @app.route('/api/v1/tickets/buy', methods=['POST'])
 def buy_ticket():
     data = request.json
-    db = TicketsDB()
+    db = TicketDB()
     ticket_uid = db.buy_ticket(data=data)
     db.db_disconnect()
     return ticket_uid
@@ -58,7 +56,7 @@ def buy_ticket():
 
 @app.route('/api/v1/tickets/<string:ticket_uid>', methods=['DELETE'])
 def return_ticket():
-    db = TicketsDB()
+    db = TicketDB()
     ticket_uid = request.form['ticket_uid']
     result = db.return_ticket(ticket_uid)
     if result != '':

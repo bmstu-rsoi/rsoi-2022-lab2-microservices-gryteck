@@ -23,7 +23,7 @@ def get_test():
 
 @app.route('/api/v1/privilege', methods=['GET'])
 def get_privilege():
-    db = PrivilegesDB()
+    db = PrivilegeDB()
     args = request.headers['X-User-Name']
     result = db.get_privilege(args)
     db.db_disconnect()
@@ -35,7 +35,7 @@ def get_privilege():
 
 @app.route('/api/v1/privilege/down', methods=['POST'])
 def privilege_down():
-    db = PrivilegesDB()
+    db = PrivilegeDB()
     args = request.json
     result = db.privilege_down(args)
     db.db_disconnect()
@@ -45,7 +45,7 @@ def privilege_down():
 
 @app.route('/api/v1/privilege/up', methods=['POST'])
 def privilege_up():
-    db = PrivilegesDB()
+    db = PrivilegeDB()
     args = request.json
     db.privilege_up(args)
     db.db_disconnect()
@@ -55,7 +55,7 @@ def privilege_up():
 
 @app.route('/api/v1/privilege/<string:ticket_uid>', methods=['DELETE'])
 def privilege_return(ticket_uid):
-    db = PrivilegesDB()
+    db = PrivilegeDB()
     username = request.headers['X-User-Name']
     db.privilege_return(ticketUid, username)
     db.db_disconnect()

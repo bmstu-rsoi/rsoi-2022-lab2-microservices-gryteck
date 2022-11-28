@@ -1,4 +1,4 @@
-FROM python:3.10.4
+FROM python:3.9.6
 EXPOSE 8050
 WORKDIR /main
 COPY main.py /main

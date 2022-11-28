@@ -2,7 +2,7 @@ version: "3"
 services:
   postgres:
     image: library/postgres:13
-    container_name: postgres
+    container_name: postgres1
     restart: on-failure
     environment:
       POSTGRES_USER: postgres
@@ -12,21 +12,15 @@ services:
       - db-data:/var/lib/postgresql/data
       - ./postgres/:/docker-entrypoint-initdb.d/
     ports:
-      - "5432:5432"
-    networks:
-      default:
-        ipv4_address: 10.5.0.2
+      - "5433:5432"
 
 # TODO добавить сервисы
   gateway:
     restart: on-failure
     build: ./gateway/
-    container_name: gateway
+    container_name: gateway1
     ports:
       - "8080:8080"
-    networks:
-      default:
-        ipv4_address: 10.5.0.3
 
   ticket:
     restart: on-failure
@@ -34,9 +28,6 @@ services:
     container_name: ticket
     ports:
       - "8070:8070"
-    networks:
-      default:
-        ipv4_address: 10.5.0.4
 
   flight:
     restart: on-failure
@@ -44,9 +35,6 @@ services:
     container_name: flight
     ports:
       - "8060:8060"
-    networks:
-      default:
-        ipv4_address: 10.5.0.5
 
   privilege:
     restart: on-failure
@@ -54,17 +42,6 @@ services:
     container_name: privilege
     ports:
       - "8050:8050"
-    networks:
-      default:
-        ipv4_address: 10.5.0.6
 
 volumes:
   db-data:
-  
-networks:
-  default:
-    driver: bridge
-    ipam:
-     config:
-       - subnet: 10.5.0.0/16
-         gateway: 10.5.0.1

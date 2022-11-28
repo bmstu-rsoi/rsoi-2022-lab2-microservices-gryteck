@@ -2,13 +2,13 @@ import psycopg2
 from psycopg2 import Error
 import datetime
 
-class FlightsDB:
+class FlightDB:
     def __init__(self):
         self.connnection = psycopg2.connect(
             database="flights",
             user="program",
             password="test",
-            host="10.5.0.2",
+            host="10.5.0.5",
             port="5432"
         )
         self.cursor = self.connection.cursor()

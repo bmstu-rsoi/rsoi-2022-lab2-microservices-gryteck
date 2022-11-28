@@ -2,7 +2,7 @@ import psycopg2
 from psycopg2 import Error
 import uuid
 
-class TicketsDB:
+class TicketDB:
     def __init__(self):
         self.connection = psycopg2.connect(
             database="tickets",
