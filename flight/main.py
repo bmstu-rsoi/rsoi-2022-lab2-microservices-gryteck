@@ -35,7 +35,6 @@ def flight_exist():
     db = FlightDB()
     args = request.data.decode()
     result = db.flight_exist(args)
-    db.db_disconnect()
     if result is False:
         return Response(status=404)
     return result

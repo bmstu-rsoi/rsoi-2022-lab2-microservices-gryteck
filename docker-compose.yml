@@ -2,7 +2,7 @@ version: "3"
 services:
   postgres:
     image: library/postgres:13
-    container_name: postgres1
+    container_name: postgres
     restart: on-failure
     environment:
       POSTGRES_USER: postgres
@@ -12,13 +12,13 @@ services:
       - db-data:/var/lib/postgresql/data
       - ./postgres/:/docker-entrypoint-initdb.d/
     ports:
-      - "5433:5432"
+      - "5432:5432"
 
 # TODO добавить сервисы
   gateway:
     restart: on-failure
     build: ./gateway/
-    container_name: gateway1
+    container_name: gateway
     ports:
       - "8080:8080"
 

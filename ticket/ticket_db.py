@@ -4,25 +4,25 @@ import uuid
 
 class TicketDB:
     def __init__(self):
-        self.connection = psycopg2.connect(
-            database="tickets",
-            user="program",
-            password="test",
-            host="10.5.0.2",
-            port="5432"
-        )
-        self.cursor = self.connection.curs()
+        self.DB_URL = "postgres://xdhoxdcbsgxlxx:f4dfbfb50de63f82e758615d34aac4b999f7f6e3914347c3eeb5e8dc1d324e7e@ec2-54-194-180-51.eu-west-1.compute.amazonaws.com:5432/db3120dunkqj65"
+
         if not self.check_existing_table_tickets():
             self.create_table_tickets()
 
 
 
     def check_existing_table_tickets(self):
-        self.cursor.execute(
-            f"SELECT EXISTS (SELECT 1 AS result FROM pg_tables WHERE tablename = 'ticket');")
-        tableExists = self.cursor.fetchone()[0]
-        return tableExists
-
+        connection = psycopg2.connect(self.DB_URL, sslmode="require")
+        cursor = connection.cursor()
+        cursor.execute("""SELECT table_name FROM information_schema.tables
+               WHERE table_schema = 'public'""")
+        for table in cursor.fetchall():
+            if table[0] == "ticket":
+                cursor.close()
+                return True
+        cursor.close()
+        connection.close()
+        return False
 
 
     def create_table_tickets(self):
@@ -49,21 +49,13 @@ class TicketDB:
 
     def get_tickets(self):
         result = list()
-        try:
-            connection = psycopg2.connect(self.DB_URL, sslmode="require")
-            cursor = connection.cursor()
-            cursor.execute("SELECT id, ticket_uid, username, flight_number, price, status FROM ticket")
-            record = cursor.fetchall()
-            for i in record:
-                i = list(i)
-                result.append({'id': i[0], "ticket_Uid": i[1], "username": i[2], "flight_number": i[3], "price": i[4]})
-        except (Exception, Error) as error:
-            print("Ошибка при работе с PostgreSQL", error)
-        finally:
-            if connection:
-                cursor.close()
-                connection.close()
-                print("Соединение с PostgreSQL закрыто")
+        connection = psycopg2.connect(self.DB_URL, sslmode="require")
+        cursor = connection.cursor()
+        cursor.execute("SELECT id, ticket_uid, username, flight_number, price, status FROM ticket")
+        record = cursor.fetchall()
+        for i in record:
+            i = list(i)
+            result.append({'id': i[0], "ticket_Uid": i[1], "username": i[2], "flight_number": i[3], "price": i[4]})
         return result
 
 
@@ -78,20 +70,22 @@ class TicketDB:
         self.cursor.execute(query)
         tmp = self.cursor.fetchone()
         result = dict()
-        result['flightNumber'] = tmp[0]
+        result['flight_number'] = tmp[0]
         result['status'] = tmp[1]
         return result
 
 
 
     def buy_ticket(self, data):
-        ticket_uid = str(uuid.uuid4())
-        query = "INSERT INTO ticket (ticket_uid, username, flight_number, price, status) " \
-                "VALUES (%s,%s,%s,%s,%s)"
-        insert_data = (ticket_uid, data['username'], data['flightNumber'], int(data['price']), data['status'])
-        self.cursor.execute(query, insert_data)
-        return ticket_uid
 
+        
+        ticket_uid = str(uuid.uuid4())
+        connection = psycopg2.connect(self.DB_URL, sslmode="require")
+        cursor = connection.cursor()
+        insert_query = """ INSERT INTO ticket (ticket_uid, username, flight_number, price, status) VALUES (%s, %s, %s, %s, %s) """
+        cursor.execute(insert_query, (ticket_uid, data['username'], data['flight_number'], data['price'], data['status']))
+        connection.commit()
+        return ticket_uid
 
 
     def return_ticket(self, ticket_Uid):

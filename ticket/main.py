@@ -46,11 +46,20 @@ def get_ticket_by_uid(ticket_uid):
 
 @app.route('/api/v1/tickets/buy', methods=['POST'])
 def buy_ticket():
-    data = request.json
+
     db = TicketDB()
-    ticket_uid = db.buy_ticket(data=data)
-    db.db_disconnect()
-    return ticket_uid
+    tickets = db.get_tickets()
+    if not request.json:
+        return Response(status=404)
+    new_ticket = {
+        'ticket_uid': request.json['ticket_uid'],
+        'username': request.json['username'],
+        'flight_number': request.json['flight_number'],
+        'price': request.json['price'],
+        'status': request.json['status']
+    }
+    db.buy_ticket(new_ticket)
+    return make_response(jsonify(new_ticket[0]), 200)
 
 
 

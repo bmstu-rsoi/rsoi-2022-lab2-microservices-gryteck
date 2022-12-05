@@ -4,14 +4,8 @@ import datetime
 
 class FlightDB:
     def __init__(self):
-        self.connnection = psycopg2.connect(
-            database="flights",
-            user="program",
-            password="test",
-            host="10.5.0.5",
-            port="5432"
-        )
-        self.cursor = self.connection.cursor()
+        self.DB_URL = "postgres://xdhoxdcbsgxlxx:f4dfbfb50de63f82e758615d34aac4b999f7f6e3914347c3eeb5e8dc1d324e7e@ec2-54-194-180-51.eu-west-1.compute.amazonaws.com:5432/db3120dunkqj65"
+
         if not self.check_existing_table_airport():
             self.create_table_airport()
         if not self.check_existing_table_flight():
@@ -20,18 +14,31 @@ class FlightDB:
 
 
     def check_existing_table_flight(self):
-        self.cursor.execute(
-            f"SELECT EXISTS (SELECT 1 AS result FROM pg_tables WHERE tablename = 'flight');")
-        tableExists = self.cursor.fetchone()[0]
-        return tableExists
-
+        connection = psycopg2.connect(self.DB_URL, sslmode="require")
+        cursor = connection.cursor()
+        cursor.execute("""SELECT table_name FROM information_schema.tables
+               WHERE table_schema = 'public'""")
+        for table in cursor.fetchall():
+            if table[0] == "flight":
+                cursor.close()
+                return True
+        cursor.close()
+        connection.close()
+        return False
 
 
     def check_existing_table_airport(self):
-        self.cursor.execute(
-            f"SELECT EXISTS (SELECT 1 AS result FROM pg_tables WHERE tablename = 'airport');")
-        tableExists = self.cursor.fetchone()[0]
-        return tableExists
+        connection = psycopg2.connect(self.DB_URL, sslmode="require")
+        cursor = connection.cursor()
+        cursor.execute("""SELECT table_name FROM information_schema.tables
+               WHERE table_schema = 'public'""")
+        for table in cursor.fetchall():
+            if table[0] == "airport":
+                cursor.close()
+                return True
+        cursor.close()
+        connection.close()
+        return False
 
 
 
@@ -55,7 +62,7 @@ class FlightDB:
                         datetime,
                         from_airport_id,
                         to_airport_id,
-                        price,
+                        price
                     )
                     VALUES 
                     (
@@ -69,7 +76,8 @@ class FlightDB:
                     '''
         connection = psycopg2.connect(self.DB_URL, sslmode="require")
         cursor = connection.cursor()
-        cursor.execute(q)
+        cursor.execute(q1)
+        cursor.execute(q2)
         connection.commit()
         cursor.close()
         connection.close()
@@ -78,7 +86,7 @@ class FlightDB:
 
     def create_table_airport(self):
         p = '''
-                    CREATE TABLE reservation
+                    CREATE TABLE airport
                     (
                         id      SERIAL PRIMARY KEY,
                         name    VARCHAR(255),
@@ -112,7 +120,7 @@ class FlightDB:
                     )
                     VALUES 
                     (
-                        1,
+                        2,
                         'Пулково',
                         'Санкт-Петербург',
                         'Россия'
@@ -120,7 +128,9 @@ class FlightDB:
                     '''
         connection = psycopg2.connect(self.DB_URL, sslmode="require")
         cursor = connection.cursor()
-        cursor.execute(q)
+        cursor.execute(p)
+        cursor.execute(p1)
+        cursor.execute(p2)
         connection.commit()
         cursor.close()
         connection.close()
@@ -129,26 +139,21 @@ class FlightDB:
 
     def get_flights(self):
         result = list()
-        try:
-            connection = psycopg2.connect(self.DB_URL, sslmode="require")
-            cursor = connection.cursor()
-            cursor.execute("SELECT id, flight_number, datetime, from_airport_id, to_airport_id, price FROM ticket")
-            record = cursor.fetchall()
-            for i in record:
-                i = list(i)
-                result.append({'id': i[0], "flight_number": i[1], "datetime": i[2], "from_airport_id": i[3], "to_airport_id": i[4], "price": i[5]})
-        except (Exception, Error) as error:
-            print("Ошибка при работе с PostgreSQL", error)
-        finally:
-            if connection:
-                cursor.close()
-                connection.close()
+        connection = psycopg2.connect(self.DB_URL, sslmode="require")
+        cursor = connection.cursor()
+        cursor.execute("SELECT id, flight_number, datetime, from_airport_id, to_airport_id, price FROM flight")
+        record = cursor.fetchall()
+        for i in record:
+            i = list(i)
+            result.append({'id': i[0], "flight_number": i[1], "datetime": i[2], "from_airport_id": i[3], "to_airport_id": i[4], "price": i[5]})
         return result
 
 
 
     def flight_exist(self, flight_number):
         query = f"SELECT EXISTS(SELECT * FROM flight WHERE flight_number = '{flight_number}');"
+        connection = psycopg2.connect(self.DB_URL, sslmode="require")
+        cursor = connection.cursor()
         self.cursor.execute(query)
         result = self.cursor.fetchone()[0]
         if result:
@@ -159,9 +164,9 @@ class FlightDB:
             self.cursor.execute(query)
             flight_info = self.cursor.fetchone()
             d = dict()
-            d['flightNumber'] = flight_number
-            d['fromAirport'] = flight_info[0]
-            d['toAirport'] = flight_info[1]
+            d['flight_number'] = flight_number
+            d['from_airport'] = flight_info[0]
+            d['to_airport'] = flight_info[1]
             d['date'] = flight_info[2]
             d['price'] = flight_info[3]
             result = d
