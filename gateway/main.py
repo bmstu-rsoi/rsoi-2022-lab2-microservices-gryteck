@@ -32,7 +32,7 @@ def not_found(error):
 def get_flights():
     page = request.args.get('page', default=0, type= int)
     size = request.args.get('size', default=0, type= int)
-    response = requests.get('http://127.0.0.1:8060/api/v1/flights', params = {'page': page, 'size': size})
+    response = requests.get('http://flight:8060/api/v1/flights', params = {'page': page, 'size': size})
     return make_response(response.json(), 200)
 
 
@@ -49,10 +49,10 @@ def get_privilege():
 
 @app.route('/api/v1/tickets', methods=['GET'])
 def get_tickets():
-    info_tickets = requests.get('http://127.0.0.1:8070/api/v1/tickets', headers=request.headers).json()
+    info_tickets = requests.get('http://ticket:8070/api/v1/tickets', headers=request.headers).json()
 
     for ticket in info_tickets:
-        info_flights = requests.get('http://127.0.0.1:8060/api/v1/flights/exist', data=ticket['flight_number']).json()
+        info_flights = requests.get('http://flight:8060/api/v1/flights/exist', data=ticket['flight_number']).json()
         ticket['from_airport'] = info_flights['from_airport']
         ticket['to_airport'] = info_flights['to_airport']
         ticket['date'] = info_flights['date']
