@@ -68,11 +68,11 @@ def get_ticket_by_uid(ticket_uid):
     if info_tickets.status_code != 200:
         return Response(status=404)
     info_tickets = info_tickets.json()
-    info_flights = requests.get('http://flight:8060/api/v1/flights/exist', data=info_tickets['flight_)number']).json()
+    info_flights = requests.get('http://flight:8060/api/v1/flights/exist', data=info_tickets['flight_number']).json()
 
     response = dict()
     response['ticket_uid'] = ticket_uid
-    response['flight_)number'] = info_tickets['flight_)number']
+    response['flight_number'] = info_tickets['flight_number']
     response['from_airport'] = info_flights['from_airport']
     response['to_airport'] = info_flights['to_airport']
     response['date'] = info_flights['date']

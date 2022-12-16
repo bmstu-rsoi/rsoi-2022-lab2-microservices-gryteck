@@ -4,7 +4,15 @@ import uuid
 
 class TicketDB:
     def __init__(self):
-        self.DB_URL = "postgres://xdhoxdcbsgxlxx:f4dfbfb50de63f82e758615d34aac4b999f7f6e3914347c3eeb5e8dc1d324e7e@ec2-54-194-180-51.eu-west-1.compute.amazonaws.com:5432/db3120dunkqj65"
+        self.connection = psycopg2.connect(
+            database="postgres",
+            user="postgres",
+            password="postgres",
+            # host="10.5.0.2",
+            port="5433"
+        )
+        self.cursor = self.connection.curs()
+
 
         if not self.check_existing_table_tickets():
             self.create_table_tickets()

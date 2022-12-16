@@ -4,7 +4,7 @@ import datetime
 
 class FlightDB:
     def __init__(self):
-        self.DB_URL = "postgres://xdhoxdcbsgxlxx:f4dfbfb50de63f82e758615d34aac4b999f7f6e3914347c3eeb5e8dc1d324e7e@ec2-54-194-180-51.eu-west-1.compute.amazonaws.com:5432/db3120dunkqj65"
+        self.DB_URL = "postgresql://program:test@postgres:5433/flight"
 
         if not self.check_existing_table_airport():
             self.create_table_airport()
