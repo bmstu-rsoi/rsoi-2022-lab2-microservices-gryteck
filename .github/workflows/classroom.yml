@@ -66,4 +66,4 @@ jobs:
       - name: Stop containers
         if: always()
         continue-on-error: true
-        run: docker compose down -v
+        run: docker compose down -f docker-compose/docker-compose.yml -v
