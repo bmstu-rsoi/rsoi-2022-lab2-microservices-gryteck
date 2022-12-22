@@ -39,7 +39,7 @@ jobs:
           docker compose -f docker-compose/docker-compose.yml up -d
           ./scripts/wait-script.sh
         env:
-          WAIT_PORTS: 8888, 8080,8070, 8060,8050, 8040, 5432
+          WAIT_PORTS: 5432, 8888, 8080, 8070, 8060, 8050, 8040,
 
       - name: Run API Tests
         uses: matt-ball/newman-action@master
