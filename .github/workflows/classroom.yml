@@ -34,7 +34,7 @@ jobs:
         run: docker compose -f docker-compose/docker-compose.yml build
 
       - name: Run containers
-        timeout-minutes: 5
+        timeout-minutes: 30
         run: |
           docker compose -f docker-compose/docker-compose.yml up -d
           ./scripts/wait-script.sh
