@@ -29,6 +29,7 @@ dependencies {
     implementation(project(":bonus-service-api"))
     implementation(project(":user-service-api"))
 
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
     // config server
     implementation("org.springframework.cloud:spring-cloud-starter-config")
     implementation("org.springframework.cloud:spring-cloud-starter-bootstrap")

@@ -39,7 +39,7 @@ jobs:
           docker compose -f docker-compose/docker-compose.yml up -d
           ./scripts/wait-script.sh
         env:
-          WAIT_PORTS: 5432, 8888, 8080, 8070, 8060, 8050, 8040,
+          WAIT_ENDPOINTS: http://localhost:8888/actuator/health, http://localhost:8080/actuator/health, http://localhost:8070/api/v1/actuator/health, http://localhost:8060/api/v1/actuator/health, http://localhost:8050/api/v1/actuator/health, http://localhost:8040/api/v1/actuator/health
 
       - name: Run API Tests
         uses: matt-ball/newman-action@master
